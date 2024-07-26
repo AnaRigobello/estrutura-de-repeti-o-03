@@ -1,0 +1,105 @@
+#Faça um programa que receba o preço unitário, a refrigeração (S para os produtos que necessitem de refrigeração e N para os que não necessitem) e a categoria
+#(A – alimentação, L – limpeza e V – vestuário) de doze produtos, e que calcule e mostre:
+#• O custo de estocagem, calculado de acordo com a tabela a seguir.
+#▪ Imposto deve ser calculado de acordo com as regras a seguir:
+#Se o produto não preencher nenhum dos requisitos abaixo, seu imposto será de 2% sobre o preço unitário; caso contrário, será de 4%.
+#Requisitos:
+#Categoria - A
+#Refrigeração - S
+#Cálculos:
+#Preço final: preço unitário + custo de estocagem + imposto
+#Classificação: calculada usando a tabela a seguir:
+#Até R$ 20,00 - Barato
+#Entre R$ 20,00 e R$ 100,00 - Normal
+#Acima de R$ 100,00 - Caro
+#Média dos valores adicionais: média dos custos de estocagem e dos impostos dos doze produtos
+#Maior preço final
+#Menor preço final
+#Total dos impostos
+#Quantidade de produtos com classificação barato
+#Quantidade de produtos com classificação caro
+#Quantidade de produtos com classificação normal
+
+def calcular_custo_estocagem(categoria):
+    if categoria == 'A':
+        return 0.03  # 3% do preço unitário
+    elif categoria == 'L':
+        return 0.02  # 2% do preço unitário
+    elif categoria == 'V':
+        return 0.04  # 4% do preço unitário
+    else:
+        return 0.02  # 2% do preço unitário por padrão
+
+# Função principal para calcular e exibir resultados
+def main():
+    produtos = []
+    total_impostos = 0.0
+    total_custos = 0.0
+    total_preco_final = 0.0
+    maior_preco_final = float('-inf')
+    menor_preco_final = float('inf')
+    quant_barato = 0
+    quant_normal = 0
+    quant_caro = 0
+    
+    for i in range(1, 13):
+        print(f"Produto {i}:")
+        preco_unitario = float(input("Informe o preço unitário: R$ "))
+        refrigeração = input("Informe a refrigeração (S/N): ").upper()
+        categoria = input("Informe a categoria (A/L/V): ").upper()
+        
+        # Cálculo do custo de estocagem
+        custo_estocagem = calcular_custo_estocagem(categoria) * preco_unitario
+        
+        # Cálculo do imposto
+        if categoria == 'A' and refrigeração == 'S':
+            imposto = 0.04 * preco_unitario  # 4% sobre o preço unitário
+        else:
+            imposto = 0.02 * preco_unitario  # 2% sobre o preço unitário
+        
+        total_impostos += imposto
+        total_custos += custo_estocagem
+        
+        # Cálculo do preço final
+        preco_final = preco_unitario + custo_estocagem + imposto
+        
+        # Determinar a classificação
+        if preco_final <= 20:
+            classificacao = "Barato"
+            quant_barato += 1
+        elif preco_final > 20 and preco_final <= 100:
+            classificacao = "Normal"
+            quant_normal += 1
+        else:
+            classificacao = "Caro"
+            quant_caro += 1
+        
+        # Atualizar estatísticas globais
+        total_preco_final += preco_final
+        if preco_final > maior_preco_final:
+            maior_preco_final = preco_final
+        if preco_final < menor_preco_final:
+            menor_preco_final = preco_final
+        
+        # Armazenar informações do produto
+        produtos.append({
+            'preco_final': preco_final,
+            'classificacao': classificacao
+        })
+    
+    # Calcular média dos valores adicionais
+    media_custos_impostos = (total_custos + total_impostos) / 12
+    
+    # Exibir resultados finais
+    print("\nRESULTADOS FINAIS:")
+    print(f"Média dos valores adicionais: R$ {media_custos_impostos:.2f}")
+    print(f"Maior preço final: R$ {maior_preco_final:.2f}")
+    print(f"Menor preço final: R$ {menor_preco_final:.2f}")
+    print(f"Total dos impostos: R$ {total_impostos:.2f}")
+    print(f"Quantidade de produtos classificados como Barato: {quant_barato}")
+    print(f"Quantidade de produtos classificados como Normal: {quant_normal}")
+    print(f"Quantidade de produtos classificados como Caro: {quant_caro}")
+
+# Execução do programa
+if __name__ == "__main__":
+    main()
